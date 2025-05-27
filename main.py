@@ -7,7 +7,6 @@ dotenv.load_dotenv()
 
 client = Bot(intents=nextcord.Intents.all(), command_prefix="!")
 
-## CPog Loader ##
 loaded_cogs = []
 
 for filename in os.listdir("./cogs"):
@@ -18,7 +17,7 @@ for filename in os.listdir("./cogs"):
 print(loaded_cogs)
 @client.slash_command(name="cogs", description="Shows all loaded cogs.")
 async def cogs(inter: nextcord.Interaction):
-    cogStr = "\n".join(f"<:Check:1344524243467239525> {cog}" for cog in loaded_cogs)
+    cogStr = "\n".join(f"<:Check:1376772416499613756> {cog}" for cog in loaded_cogs)
     await inter.send(embed=nextcord.Embed(title="Loaded Cogs", description=cogStr, color=nextcord.Color.blue()), ephemeral=True)
 
 devMode = os.getenv("devMode")
