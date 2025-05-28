@@ -10,7 +10,7 @@ client = Bot(intents=nextcord.Intents.all(), command_prefix="!")
 loaded_cogs = []
 
 for filename in os.listdir("./cogs"):
-    if filename.endswith(".py") and not filename in ["__init__.py", "PrebuiltEmbeds.py", 'config.py']:
+    if filename.endswith(".py") and not filename in ["__init__.py", "PrebuiltEmbeds.py", 'config.py', 'appwriteHandler.py']:
         client.load_extension(f"cogs.{filename[:-3]}")
         loaded_cogs.append(f"{filename[:-3].capitalize()}")
 
