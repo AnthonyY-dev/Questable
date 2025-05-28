@@ -21,14 +21,10 @@ for filename in os.listdir("./cogs"):
 devMode = os.getenv("devMode", "0")
 
 appWriteClient = Client()
-if devMode=="0":
-    appWriteClient.set_endpoint('https://fra.cloud.appwrite.io/v1') # Re  place with your Appwrite endpoint
-    appWriteClient.set_project('68353a7b0002defacf67') # Replace with your project ID
-    appWriteClient.set_key(os.getenv("prodAppwriteKey")) # Replace with your secret API key
-elif devMode=="1":
-    appWriteClient.set_endpoint('https://fra.cloud.appwrite.io/v1') # Re  place with your Appwrite endpoint
-    appWriteClient.set_project('68353af3001e33714650') # Replace with your project ID
-    appWriteClient.set_key(os.getenv("devAppwriteKey")) # Replace with your secret API key
+
+appWriteClient.set_endpoint('https://fra.cloud.appwrite.io/v1') # Re  place with your Appwrite endpoint
+appWriteClient.set_project('68353a7b0002defacf67') # Replace with your project ID
+appWriteClient.set_key(os.getenv("appWriteKey")) # Replace with your secret API key
 databases = Databases(appWriteClient)
 
 appwriteHandler.init(appwriteHandler, databases)
@@ -41,8 +37,6 @@ async def cogs(inter: nextcord.Interaction):
 @client.event
 async def on_ready():
     print("\033[0;32mClient Ready!\x1b[0m")
-
-
 
 
 if devMode == "0":

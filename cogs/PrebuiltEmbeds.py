@@ -1,4 +1,5 @@
 import nextcord
+from .config import Emojis, Branding
 
 MissingSubcommandEmbed = nextcord.Embed(title="Missing Subcommand!", description="Please specify a subcommand.", colour=nextcord.Colour.red())
 
@@ -16,3 +17,35 @@ def MissingRoleEmbed(role_ids, guild: nextcord.Guild):
         description=f"Required Role(s): {', '.join(role_mentions)}",
         colour=nextcord.Colour.red()
     )
+
+"""
+validitys = {
+            'name': False,
+            'description': False,
+            'difficulty': False,
+        }
+"""
+def InvalidQuestInfo(validities):
+   return nextcord.Embed(title="Invalid Quest Info", description=f"""**Name**: {Emojis['Check'] if validities['name'] else Emojis['X']}
+**Description**: {Emojis['Check'] if validities['description'] else Emojis['X']}
+**Difficulty**: {Emojis['Check'] if validities['difficulty'] else Emojis['X']}""", colour=nextcord.Colour.red())
+
+
+
+def QuestEmbed(quest_name, description, difficulty, xp_awarded, image: str | None = None):
+    line = Emojis["Line"]
+    qEmbed = nextcord.Embed(title=quest_name, description=f"""{line}{line}{line}{line}{line}{line}{line}{line}{line}{line}{line}{line}{line}{line}{line}
+
+{description}
+
+{line}{line}{line}{line}{line}{line}{line}{line}{line}{line}{line}{line}{line}{line}{line}
+
+**XP Awarded:** {xp_awarded} {Emojis["XP"]}
+**Difficulty:** `{str(difficulty)}/5` {Emojis["Difficulty"][difficulty]}
+
+{line}{line}{line}{line}{line}{line}{line}{line}{line}{line}{line}{line}{line}{line}{line}""", colour=nextcord.Colour.from_rgb(56, 182, 255))
+
+    qEmbed.set_author(name="Questable", url=Branding['QuestableLogoURL'])
+
+
+    return qEmbed

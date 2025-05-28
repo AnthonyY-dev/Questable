@@ -14,7 +14,7 @@ class Events(Cog):
     @Cog.listener()
     async def on_application_command_error(self, interaction: nextcord.Interaction, error):
         if isinstance(error, application_checks.errors.ApplicationMissingAnyRole):
-            await interaction.send(embed=MissingRoleEmbed(error.missing_roles, interaction.guild))
+            await interaction.send(embed=MissingRoleEmbed(error.missing_roles, interaction.guild), ephemeral=True)
 
         else:
             print(error)

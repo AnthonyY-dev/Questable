@@ -12,11 +12,11 @@ def init(hndlr, dbs):
    appWriteHandler = hndlr
    print("\033[0;32mAppwrite Initialized!\x1b[0m")
 
-database_id = '683611970020524127e3' # Replace with your database ID
-collection_id = '6836119d000f493c8bc7' # Replace with your collection ID
+database_id = '6836849f002e091eb88a' # Replace with your database ID
+collection_id = '683684a5003cc0ba234e' # Replace with your collection ID
 
 
-def addQuest(name: str, description: str, difficulty: int, xp_awarded: int, image_url: str | None):
+def addQuest(name: str, description: str, difficulty: int, xp_awarded: int, image_url: str | None = None):
     """
     @TODO
     """
@@ -30,10 +30,9 @@ def addQuest(name: str, description: str, difficulty: int, xp_awarded: int, imag
     # Add more attributes as needed
     }
 
-    result = databases.create_document(
+    databases.create_document(
             database_id=database_id,
             collection_id=collection_id,
             document_id=ID.unique(), # Generates a unique ID for the document
             data=document_data
         )
-    print(result)
