@@ -18,7 +18,8 @@ Emojis={
 }
 
 Channels={
-    "Quests": 1377134231964356658
+    "Quests": 1377134231964356658,
+    "QuestSubmissions": 1377494300589424650
 }
 
 Branding={

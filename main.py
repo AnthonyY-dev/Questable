@@ -5,7 +5,12 @@ import os
 from cogs import appwriteHandler
 from appwrite.client import Client
 from appwrite.services.databases import Databases
-os.system("clear")
+
+if os.name == 'nt':
+    clear_command = 'cls'
+else:
+    clear_command = 'clear'
+os.system(clear_command)
 
 dotenv.load_dotenv()
 

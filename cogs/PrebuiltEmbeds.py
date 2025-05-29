@@ -32,8 +32,15 @@ def InvalidQuestInfo(validities):
 
 
 
-def QuestEmbed(quest_name, description, difficulty, xp_awarded, image: str | None = None):
+def QuestEmbed(quest_name, description, difficulty, xp_awarded,  questId: str,image: str | None = None, isThreadQuestAccepted: bool | None = None):
     line = Emojis["Line"]
+    
+    color=nextcord.Colour.from_rgb(56, 182, 255)
+    if isThreadQuestAccepted == True:
+        color=nextcord.Colour.green()
+    elif isThreadQuestAccepted == False:
+        color=nextcord.Colour.red()
+    
     qEmbed = nextcord.Embed(title=quest_name, description=f"""{line}{line}{line}{line}{line}{line}{line}{line}{line}{line}{line}{line}{line}{line}{line}
 
 {description}
@@ -43,9 +50,13 @@ def QuestEmbed(quest_name, description, difficulty, xp_awarded, image: str | Non
 **XP Awarded:** {xp_awarded} {Emojis["XP"]}
 **Difficulty:** `{str(difficulty)}/5` {Emojis["Difficulty"][difficulty]}
 
-{line}{line}{line}{line}{line}{line}{line}{line}{line}{line}{line}{line}{line}{line}{line}""", colour=nextcord.Colour.from_rgb(56, 182, 255))
+{line}{line}{line}{line}{line}{line}{line}{line}{line}{line}{line}{line}{line}{line}{line}""", colour=color)
 
     qEmbed.set_author(name="Questable", url=Branding['QuestableLogoURL'])
-
+    qEmbed.set_footer(text="ID: "+questId+" - Submit via /submit "+questId)
 
     return qEmbed
+
+
+
+QuestNotFoundEmbed = nextcord.Embed(title="Error finding quest",description="The requested quest could not be found.", colour=nextcord.Colour.red())
