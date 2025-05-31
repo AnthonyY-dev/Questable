@@ -9,7 +9,7 @@ import nextcord.ext.commands
 
 from .config import StaffRoleIdArray, QuestCreationPerms, Channels, Emojis, QuestAcceptDenyPerms
 from .PrebuiltEmbeds import InvalidQuestInfo, QuestEmbed, QuestNotFoundEmbed, MissingRoleEmbed, questCompletedEmbed, questPendingEmbed
-from .appwriteHandler import addQuest, getQuestById, markQuestAccepted, checkIfQuestPendingOrCompleted
+from .appwriteHandler import addQuest, getQuestById, markQuestAccepted, checkIfQuestPendingOrCompleted, denyQuest, pendQuest
 
 
 class Quests(Cog):
@@ -102,6 +102,8 @@ class Quests(Cog):
             denyBtn = nextcord.ui.Button(style=nextcord.ButtonStyle.red, label=f"Quest Denied by {btnInter.user.global_name}", emoji=Emojis["X"], disabled=True)
             deniedView.add_item(acceptBtn)
             deniedView.add_item(denyBtn)
+            
+            denyQuest(inter.user.id, quest_id)
             await btnInter.channel.edit(applied_tags=[deniedTag])
             
             await btnInter.message.edit(content=f"Quest Denied by {btnInter.user.mention}",embed=QuestEmbed(questDetails['name'], questDetails['description'], int(questDetails['difficulty']), int(questDetails['xp_awarded']), quest_id, isThreadQuestAccepted=False), view=deniedView)
@@ -112,11 +114,79 @@ class Quests(Cog):
         view.add_item(acceptBtn)
         view.add_item(denyBtn)
         
-        thread = await submissionsChannel.create_thread(name=f"{inter.user.global_name}'s Submission for \"{questDetails['name']}\"", applied_tags=[pendingTag], embed=QuestEmbed(questDetails['name'], questDetails['description'], int(questDetails['difficulty']), int(questDetails['xp_awarded']), quest_id),content=f"{inter.user.mention} Please post any relevant details / images / videos here!", view=view)
+        pendQuest(inter.user.id, quest_id)
+        
+        thread = await submissionsChannel.create_thread(name=f"{inter.user.global_name}'s Submission for \"{questDetails['name']}\"", applied_tags=[pendingTag], embed=QuestEmbed(questDetails['name'], questDetails['description'], int(questDetails['difficulty']), int(questDetails['xp_awarded']), quest_id),content=f"{inter.user.mention} Please post any relevant details / images / videos here!\n-# {quest_id}", view=view)
         
         await inter.send(f"Done! Your quest submission was created at {thread.mention}.", ephemeral=True)
         
+    @nextcord.slash_command(name="staff_panel", description="Authorized Access Only - Opens a panel for quests, incase this one has expired.")
+    @application_checks.has_any_role(*QuestAcceptDenyPerms)
+    async def staff_panel(self, inter: nextcord.Interaction):
+        thread = inter.channel
+        msg = await thread.fetch_message(thread.id)
         
+        if not msg:
+            await inter.send("Error! This is not a quest submission, or the starting message was deleted, or this quest has already been accepted / denied.")
+            return
+        quest_id = ""
+        try:
+            quest_id = msg.content.split("\n")[1].removeprefix("-# ")
+        except Exception:
+            await inter.send("Error, could not parse the starting message of this thread, so I could not find the ID.", ephemeral=True)
+            return
+            
+        questDetails = getQuestById(quest_id)
+        if questDetails == 404:
+            await inter.send(embed=QuestNotFoundEmbed, ephemeral=True)
+            return
+        
+        
+        submissionsChannel = inter.guild.get_channel(Channels["QuestSubmissions"])
+        
+        view = nextcord.ui.View(timeout=None)
+        
+        acceptBtn = nextcord.ui.Button(style=nextcord.ButtonStyle.green, label="Accept", emoji=Emojis["Check"])
+        denyBtn = nextcord.ui.Button(style=nextcord.ButtonStyle.red, label="Deny", emoji=Emojis["X"])
+        
+        pendingTag = submissionsChannel.get_tag(1377494517531410463)
+        acceptedTag = submissionsChannel.get_tag(1377494563446587422)
+        deniedTag = submissionsChannel.get_tag(1377494594551414835)
+        
+        async def acceptCallback(btnInter: nextcord.Interaction):
+            if not any(role.id in QuestAcceptDenyPerms for role in btnInter.user.roles):
+                await btnInter.response.send_message(embed=MissingRoleEmbed(QuestAcceptDenyPerms, btnInter.guild), ephemeral=True)
+                return
+            
+            markQuestAccepted(inter.user.id,quest_id)
+            
+            acceptedView = nextcord.ui.View(timeout=None)
+            acceptBtn = nextcord.ui.Button(style=nextcord.ButtonStyle.green, label=f"Quest accepted by {btnInter.user.global_name}", emoji=Emojis["Check"], disabled=True)
+            denyBtn = nextcord.ui.Button(style=nextcord.ButtonStyle.red, label=f"Deny", emoji=Emojis["X"], disabled=True)
+            acceptedView.add_item(acceptBtn)
+            acceptedView.add_item(denyBtn)
+            await btnInter.channel.edit(applied_tags=[acceptedTag])
+            
+            await msg.edit(content=f"Quest accepted by {btnInter.user.mention}",embed=QuestEmbed(questDetails['name'], questDetails['description'], int(questDetails['difficulty']), int(questDetails['xp_awarded']), quest_id, isThreadQuestAccepted=True))
+            await btnInter.response.edit_message(content="Done! Quest accepted.", view=None)
+        
+        async def denyCallback(btnInter: nextcord.Interaction):
+            if not any(role.id in QuestAcceptDenyPerms for role in btnInter.user.roles):
+                await btnInter.response.send_message(embed=MissingRoleEmbed(QuestAcceptDenyPerms, btnInter.guild), ephemeral=True)
+                return
+            
+            denyQuest(inter.user.id, quest_id)
+            await btnInter.channel.edit(applied_tags=[deniedTag])
+            
+            await msg.edit(content=f"Quest Denied by {btnInter.user.mention}",embed=QuestEmbed(questDetails['name'], questDetails['description'], int(questDetails['difficulty']), int(questDetails['xp_awarded']), quest_id, isThreadQuestAccepted=False))
+            await btnInter.response.edit_message(content="Done! Quest denied.", view=None)
+        acceptBtn.callback = acceptCallback
+        denyBtn.callback = denyCallback
+        
+        view.add_item(acceptBtn)
+        view.add_item(denyBtn)
+        
+        await inter.send("Staff Panel", view=view, ephemeral=True)
         
         
         

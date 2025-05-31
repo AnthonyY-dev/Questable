@@ -127,3 +127,35 @@ def checkIfQuestPendingOrCompleted(user_id: int | str, questId: str):
         
     
     return "ready"
+
+def denyQuest(user_id: int | str, questId: str):
+    result = getUserInfo(user_id)
+    if questId in result['pendingQuests']:
+        result['pendingQuests'].remove(questId)
+        updateResult = databases.update_document(
+                database_id=database_id,
+                collection_id = user_collection_id,
+                document_id=str(user_id),
+                data={
+                'completedQuests': result['completedQuests'],
+                'xp': result['xp'],
+                'level': result['level'],
+                'pendingQuests': result['pendingQuests']
+            }
+            )
+        
+def pendQuest(user_id: int | str, questId: str):
+    result = getUserInfo(user_id)
+    
+    result['pendingQuests'].append(questId)
+    updateResult = databases.update_document(
+            database_id=database_id,
+            collection_id = user_collection_id,
+            document_id=str(user_id),
+            data={
+            'completedQuests': result['completedQuests'],
+            'xp': result['xp'],
+            'level': result['level'],
+            'pendingQuests': result['pendingQuests']
+        }
+        )
