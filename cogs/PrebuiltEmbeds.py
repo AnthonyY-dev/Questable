@@ -38,8 +38,10 @@ def QuestEmbed(quest_name, description, difficulty, xp_awarded,  questId: str,im
     color=nextcord.Colour.from_rgb(56, 182, 255)
     if isThreadQuestAccepted == True:
         color=nextcord.Colour.green()
+        line=Emojis["LineGreen"]
     elif isThreadQuestAccepted == False:
         color=nextcord.Colour.red()
+        line=Emojis["LineRed"]
     
     qEmbed = nextcord.Embed(title=quest_name, description=f"""{line}{line}{line}{line}{line}{line}{line}{line}{line}{line}{line}{line}{line}{line}{line}
 

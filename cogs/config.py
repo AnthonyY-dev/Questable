@@ -1,5 +1,7 @@
 StaffRoleIdArray = []
 QuestCreationPerms = [1375338902570926130,1375920805598462092]
+QuestAcceptDenyPerms = [1375920348440035419]
+
 
 Emojis={
     "Check": "<:Check:1376772416499613756>",
@@ -14,7 +16,10 @@ Emojis={
         3: "<:medium:1377139076553113671>",
         4: "<:hard:1377139103631544360>",
         5: "<:expert:1377139139442507809>"
-    }
+    },
+    
+    "LineGreen": "<:LineGreen:1377693122342944848>",
+    "LineRed": "<:LineRed:1377693123689578496>"
 }
 
 Channels={
