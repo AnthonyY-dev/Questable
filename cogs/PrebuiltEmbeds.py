@@ -1,5 +1,5 @@
 import nextcord
-from .config import Emojis, Branding
+from .config import Emojis, Branding, Channels
 
 MissingSubcommandEmbed = nextcord.Embed(title="Missing Subcommand!", description="Please specify a subcommand.", colour=nextcord.Colour.red())
 
@@ -62,3 +62,6 @@ def QuestEmbed(quest_name, description, difficulty, xp_awarded,  questId: str,im
 
 
 QuestNotFoundEmbed = nextcord.Embed(title="Error finding quest",description="The requested quest could not be found.", colour=nextcord.Colour.red())
+
+questCompletedEmbed = nextcord.Embed(title="Error! This quest is already done.", description=f"You have already completed this quest! Find some more in <#{Channels['Quests']}>", colour=nextcord.Colour.green())
+questPendingEmbed = nextcord.Embed(title="Error! This quest is pending.", description=f"This quest is already pending to be accepted or denied! In the meantime, find some more in <#{Channels['Quests']}>", color=nextcord.Colour.yellow())

@@ -48,10 +48,21 @@ def getQuestById(id: str):
         document_id = id,
         queries = [] 
         )
+       
         return result
     except Exception as e:
         return 404
     
+def getUserInfo(userId):
+    try:
+        return databases.get_document(
+            database_id = database_id,
+            collection_id = user_collection_id,
+            document_id = str(userId),
+            queries = [] 
+            )
+    except Exception as e:
+        return None
 def markQuestAccepted(userId: int, questId: str):
     # get quest details
     
@@ -64,18 +75,8 @@ def markQuestAccepted(userId: int, questId: str):
     # check if user is in db
     
     try:
-        result = databases.get_document(
-        database_id = database_id,
-        collection_id = user_collection_id,
-        document_id = str(userId),
-        queries = [] 
-        )
-        # print(result)
-        
+        result = getUserInfo(userId)
         # user in db, add quest to him
-        
-        
-        
         if questId in result['pendingQuests']:
             result['pendingQuests'].remove(questId)
         result['completedQuests'].append(questId)
@@ -110,3 +111,19 @@ def markQuestAccepted(userId: int, questId: str):
             document_id=str(userId),
             data=userData
         )
+        
+        
+def checkIfQuestPendingOrCompleted(user_id: int | str, questId: str):
+    userInfo = getUserInfo(user_id)
+
+    if not userInfo: 
+        return "ready"
+    
+    if questId in userInfo['completedQuests']:
+        return "completed"
+    
+    if questId in userInfo["pendingQuests"]:
+        return "pending"
+        
+    
+    return "ready"

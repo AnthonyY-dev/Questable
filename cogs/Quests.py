@@ -8,8 +8,8 @@ import nextcord.ext.commands
 
 
 from .config import StaffRoleIdArray, QuestCreationPerms, Channels, Emojis, QuestAcceptDenyPerms
-from .PrebuiltEmbeds import InvalidQuestInfo, QuestEmbed, QuestNotFoundEmbed, MissingRoleEmbed
-from .appwriteHandler import addQuest, getQuestById, markQuestAccepted
+from .PrebuiltEmbeds import InvalidQuestInfo, QuestEmbed, QuestNotFoundEmbed, MissingRoleEmbed, questCompletedEmbed, questPendingEmbed
+from .appwriteHandler import addQuest, getQuestById, markQuestAccepted, checkIfQuestPendingOrCompleted
 
 
 class Quests(Cog):
@@ -49,7 +49,21 @@ class Quests(Cog):
             await inter.send(embed=QuestNotFoundEmbed, ephemeral=True)
             return
         
-        # Is a real quest
+        # Is a real quest, now check if its already pending or completed
+        pendingOrCompleted = checkIfQuestPendingOrCompleted(inter.user.id, quest_id)
+        
+        if not pendingOrCompleted == 'ready':
+            if pendingOrCompleted == 'pending':
+                await inter.send(embed=questPendingEmbed, ephemeral=True)
+                return
+            if pendingOrCompleted == 'completed':
+                await inter.send(embed=questCompletedEmbed, ephemeral=True)
+                return
+            return
+        
+        
+        
+        
         submissionsChannel = inter.guild.get_channel(Channels["QuestSubmissions"])
         
         view = nextcord.ui.View(timeout=None)
