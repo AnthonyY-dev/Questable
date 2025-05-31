@@ -8,8 +8,8 @@ import nextcord.ext.commands
 
 
 from .config import StaffRoleIdArray, QuestCreationPerms, Channels, Emojis, QuestAcceptDenyPerms
-from .PrebuiltEmbeds import InvalidQuestInfo, QuestEmbed, QuestNotFoundEmbed, MissingRoleEmbed, questCompletedEmbed, questPendingEmbed
-from .appwriteHandler import addQuest, getQuestById, markQuestAccepted, checkIfQuestPendingOrCompleted, denyQuest, pendQuest
+from .PrebuiltEmbeds import InvalidQuestInfo, QuestEmbed, QuestNotFoundEmbed, MissingRoleEmbed, questCompletedEmbed, questPendingEmbed, ProfileEmbed
+from .appwriteHandler import addQuest, getQuestById, markQuestAccepted, checkIfQuestPendingOrCompleted, denyQuest, pendQuest, getUserInfo
 
 
 class Quests(Cog):
@@ -188,7 +188,11 @@ class Quests(Cog):
         
         await inter.send("Staff Panel", view=view, ephemeral=True)
         
+    @nextcord.slash_command(name="profile", description="Views your current profile! Shows XP needed to progress to the next level, and other stats.")
+    async def profile(self,inter: nextcord.Interaction):
+        userInfo = getUserInfo(inter.user.id)
         
+        await inter.send(embed=ProfileEmbed(inter.user, userInfo))
         
         
 def setup(client: nextcord.ext.commands.Bot):

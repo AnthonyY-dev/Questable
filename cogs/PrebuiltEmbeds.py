@@ -1,5 +1,8 @@
 import nextcord
 from .config import Emojis, Branding, Channels
+from .utils import xpUntilNextLevel, getProgressBar
+import math
+
 
 MissingSubcommandEmbed = nextcord.Embed(title="Missing Subcommand!", description="Please specify a subcommand.", colour=nextcord.Colour.red())
 
@@ -65,3 +68,19 @@ QuestNotFoundEmbed = nextcord.Embed(title="Error finding quest",description="The
 
 questCompletedEmbed = nextcord.Embed(title="Error! This quest is already done.", description=f"You have already completed this quest! Find some more in <#{Channels['Quests']}>", colour=nextcord.Colour.green())
 questPendingEmbed = nextcord.Embed(title="Error! This quest is pending.", description=f"This quest is already pending to be accepted or denied! In the meantime, find some more in <#{Channels['Quests']}>", color=nextcord.Colour.yellow())
+
+def ProfileEmbed(user: nextcord.Member, userInfo):
+    xpUntilNext = xpUntilNextLevel(userInfo["xp"])
+    line = Emojis["LineGreen"]
+    Prog = Emojis["ProgressBar"]
+    embed = nextcord.Embed(title="Your Profile",description=f"""{Emojis["Difficulty"][2]} **`Username`**: `{user.name}`
+                           {Emojis["Level"]} **`Level`**: **{userInfo['level']}**
+                           {Emojis["XP"]} **`Total XP`**: **{round(userInfo['xp'])}**
+                           {line}{line}{line}{line}{line}{line}{line}{line}{line}{line}{line}{line}{line}{line}{line}
+                           {Emojis["XP"]} **`XP Until next level`**: **{round(xpUntilNext[0])}** (You are {round(xpUntilNext[2]*100, 1)}% there!)
+                           {getProgressBar(xpUntilNext[1])}
+                           """, colour=nextcord.Colour.green())
+    embed.set_thumbnail(user.avatar)
+    
+    
+    return embed

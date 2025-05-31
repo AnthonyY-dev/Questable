@@ -19,7 +19,16 @@ Emojis={
     },
     
     "LineGreen": "<:LineGreen:1377693122342944848>",
-    "LineRed": "<:LineRed:1377693123689578496>"
+    "LineRed": "<:LineRed:1377693123689578496>",
+    
+    "ProgressBar": {
+        "LeftFull": "<:l_f:1378446219847929888>",
+        "MiddleFull": "<:m_f:1378446182585471117>",
+        "RightFull": "<:r_f:1378446157256327320>",
+        "LeftEmpty": "<:l_e:1378446390505640067>",
+        "MiddleEmpty": "<:m_e:1378446201954766880>",
+        "RightEmpty": "<:r_e:1378446247928660030>"
+    }
 }
 
 Channels={
