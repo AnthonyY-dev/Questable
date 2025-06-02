@@ -32,4 +32,6 @@ jobs:
             pip install -r requirements.txt
 
             pkill -f "python main.py" || true
+            echo "Restarting the questable service now..."
             sudo systemctl restart questable
+            echo "Restart command finished!"
