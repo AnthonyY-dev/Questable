@@ -167,7 +167,7 @@ class Quests(Cog):
             acceptedView.add_item(denyBtn)
             await btnInter.channel.edit(applied_tags=[acceptedTag])
             
-            await msg.edit(content=f"Quest accepted by {btnInter.user.mention}",embed=QuestEmbed(questDetails['name'], questDetails['description'], int(questDetails['difficulty']), int(questDetails['xp_awarded']), quest_id, isThreadQuestAccepted=True))
+            await msg.edit(content=f"Quest accepted by {btnInter.user.mention}",embed=QuestEmbed(questDetails['name'], questDetails['description'], int(questDetails['difficulty']), int(questDetails['xp_awarded']), quest_id, isThreadQuestAccepted=True), view=None)
             await btnInter.response.edit_message(content="Done! Quest accepted.", view=None)
         
         async def denyCallback(btnInter: nextcord.Interaction):
@@ -178,7 +178,7 @@ class Quests(Cog):
             denyQuest(inter.user.id, quest_id)
             await btnInter.channel.edit(applied_tags=[deniedTag])
             
-            await msg.edit(content=f"Quest Denied by {btnInter.user.mention}",embed=QuestEmbed(questDetails['name'], questDetails['description'], int(questDetails['difficulty']), int(questDetails['xp_awarded']), quest_id, isThreadQuestAccepted=False))
+            await msg.edit(content=f"Quest Denied by {btnInter.user.mention}",embed=QuestEmbed(questDetails['name'], questDetails['description'], int(questDetails['difficulty']), int(questDetails['xp_awarded']), quest_id, isThreadQuestAccepted=False), view=None)
             await btnInter.response.edit_message(content="Done! Quest denied.", view=None)
         acceptBtn.callback = acceptCallback
         denyBtn.callback = denyCallback
