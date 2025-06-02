@@ -79,7 +79,7 @@ def ProfileEmbed(user: nextcord.Member, userInfo):
                            {Emojis["XP"]} **`XP Until next level`**: **{round(xpUntilNext[0])}** (You are {round(xpUntilNext[2]*100, 1)}% there!)
                            {getProgressBar(xpUntilNext[1])}
                            """, colour=nextcord.Colour.green())
-    embed.set_thumbnail(user.avatar)
+    embed.set_thumbnail(user.avatar.url)
     
     
     return embed
