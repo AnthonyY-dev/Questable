@@ -1,7 +1,6 @@
 import nextcord
 from .config import Emojis, Branding, Channels
 from .utils import xpUntilNextLevel, getProgressBar
-import math
 
 
 MissingSubcommandEmbed = nextcord.Embed(title="Missing Subcommand!", description="Please specify a subcommand.", colour=nextcord.Colour.red())

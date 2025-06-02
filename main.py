@@ -41,7 +41,8 @@ async def cogs(inter: nextcord.Interaction):
 
 @client.event
 async def on_ready():
-    print("\033[0;32mClient Ready!\x1b[0m")
+    print("\033[0;32mClient Ready - HOSTING TEST!\x1b[0m")
+
 
 
 if devMode == "0":
