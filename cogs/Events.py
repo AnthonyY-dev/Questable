@@ -18,6 +18,9 @@ class Events(Cog):
 
         else:
             print(error)
-
+    @Cog.listener()
+    async def on_member_join(self, member: nextcord.Member):
+        await member.add_roles(member.guild.get_role(1375341523163545685))
+        
 def setup(client):
     client.add_cog(Events(client))

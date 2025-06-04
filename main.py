@@ -43,7 +43,8 @@ async def cogs(inter: nextcord.Interaction):
 async def on_ready():
     print("\033[0;32mClient Ready - HOSTING TEST!\x1b[0m")
     await client.get_guild(1366641735996018698).get_channel(1378952264927940698).send("beep i restarted")
-
+    
+   
 
 if devMode == "0":
     client.run(os.getenv("prod"))   
